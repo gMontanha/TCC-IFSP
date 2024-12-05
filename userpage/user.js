@@ -3,25 +3,35 @@ async function loadUserPage() {
     console.log('Retrieved token:', token);
 
     if (!token) {
-        alert('Não autorizado! Por favor entre pro via de login.');
+        alert('Não autorizado! Por favor entre por via de login.');
         window.location.href = '/'; // Redireciona pro Login
         return;
     }
 
     try {
-        const response = await fetch('/user', {
-            headers: { 'Authorization': `Bearer ${token}` },
+        const responseCheck = await fetch('/auth-check', {
+            headers: { 'Authorization': `Bearer ${token}` }
         });
 
-        if (!response.ok) {
+        if (!responseCheck.ok) {
             throw new Error('Unauthorized');
         }
         else {
-            window.location.href = '/user';
-        }
-    } catch (error) {
-        alert('Não autorizado! Por favor entre pro via de login.');
+            const responseLogin = await fetch('/login', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            
+            if (!responseLogin.ok){
+                throw new Error('Login Problems');
+            }
+
+            window.location.href = '/user'
+        } 
+
+    }catch (error) {
         console.error('Error loading user page:', error);
+        alert('Não autorizado! Por favor entre pro via de login.');
         window.location.href = '/'; // Redireciona pro Login
     }
 }

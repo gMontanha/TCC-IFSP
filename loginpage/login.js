@@ -16,6 +16,7 @@ registerLink.addEventListener('click', ()=> {
 loginLink.addEventListener('click', ()=> {
   box.classList.remove('active');
 })
+//----------------------------------------
 
 //Toggle do carregamento
 function showSpinner() {
@@ -27,6 +28,7 @@ function hideSpinner() {
   overlay.style.display = "none";
   spinner.style.display = "none";
 }
+//------------------------------------------
 
 //Login
 loginButton.addEventListener('click', async () => {
@@ -89,6 +91,7 @@ registerButton.addEventListener('click', async ()=> {
     alert("Suas senhas não estão iguais! Por favor preencha elas novamente.");
     return;
   }
+  //---------------------------------
 
   try {
     showSpinner();
