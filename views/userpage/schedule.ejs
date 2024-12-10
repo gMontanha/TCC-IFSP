@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head') %>
+<body class="w3-light-grey w3-content" style="max-width:1600px">
+    
+    <%- include('../partials/sidebar') %>
+      
+      <!-- !PAGE CONTENT! -->
+      <div class="w3-main w3-container" style="margin-left:300px">
+
+        <%- include('../partials/header') %>
+
+        <% if (!workSchedule || workSchedule.length === 0) { %>
+            <!-- Se não houver schedule -->
+            <p>Você ainda não configurou sua agenda. Crie uma agora:</p>
+            <form action="/user/schedule" method="POST">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dia</th>
+                            <th>Início</th>
+                            <th>Término</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% const days = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo']; %>
+                        <% days.forEach(day => { %>
+                            <tr>
+                                <td><%= day %></td>
+                                <td><input type="time" step="300" name="schedule[<%= day %>][start]" required></td>
+                                <td><input type="time" step="300" name="schedule[<%= day %>][end]" required></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+                <button type="submit">Salvar Agenda</button>
+            </form>
+        <% } else { %>
+            <!-- Se já houver schedule -->
+            <form action="/user/schedule" method="POST">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dia</th>
+                            <th>Início</th>
+                            <th>Término</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% workSchedule.forEach(day => { %>
+                            <tr>
+                                <td><%= day.day %></td>
+                                <td>
+                                    <input 
+                                        type="time" 
+                                        name="schedule[<%= day.day %>][start]" 
+                                        value="<%= day.start %>" 
+                                        required>
+                                </td>
+                                <td>
+                                    <input 
+                                        type="time" 
+                                        name="schedule[<%= day.day %>][end]" 
+                                        value="<%= day.end %>" 
+                                        required>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+                <button type="submit" style="width:233px">Atualizar Agenda</button>
+            </form>
+        <% } %>
+    </div>
+</body>
+</html>

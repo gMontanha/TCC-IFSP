@@ -83,7 +83,7 @@ registerButton.addEventListener('click', async ()=> {
   }
 
   if (!passValue.match (regex)) {
-    alert("Senha inválida! Sua senha deve ter:\n- 8 caracteres\n- Pelo menos uma letra minúscula\n- Pelo menos uma letra maiúscula\n- Um número");
+    alert("Senha inválida! Sua senha deve ter:\n- 8 caracteres\n- Pelo menos uma letra minúscula\n- Pelo menos uma letra maiúscula\n- Um número\n- Um caractere especial (*-.;)");
     return;
   }
 

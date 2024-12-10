@@ -3,12 +3,15 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
+import userRouter from './routes/users.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
 
+dotenv.config();
 app.use(cookieParser());
 app.use(express.static("./loginpage"));
 app.use(express.static("./verification"));
@@ -18,7 +21,7 @@ app.use(express.json());
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: true }))
 
-const secretKey = "sdZxW+<cGqRKX9-FauSty";
+const secretKey = process.env.SECRET_KEY;
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/loginpage/login.html");
@@ -40,17 +43,11 @@ app.post('/login', (req, res) => {
     res.sendStatus(200);
 });
 
-app.get('/user', authenticateToken, (req, res) => {
-    const userData = {
-        email: req.user.email,
-        name: req.user.name
-    };
-    res.render("userpage/user", { user: userData });
-});
-
 app.get("/Verification", (req, res) => {
     res.sendFile(__dirname + "/verification/verification.html");
 });
+
+app.use("/user", userRouter);
 
 // Middleware para autenticar token
 function authenticateToken(req, res, next) {
@@ -68,7 +65,7 @@ function authenticateToken(req, res, next) {
             return res.sendStatus(403); // Forbidden
         }
         req.user = user;
-        console.log(req.user);
+        //console.log(req.user);
         next();
     });
 }
@@ -76,3 +73,5 @@ function authenticateToken(req, res, next) {
 app.listen(80, '0.0.0.0', () => {
     console.log("Servidor rodando!");
 });
+
+export { authenticateToken };
